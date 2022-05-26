@@ -1,0 +1,25 @@
+name: Chromatic
+
+on:
+  pull_request:
+    types: [review_requested, ready_for_review]
+
+jobs:
+  chromatic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # 👈 Required to retrieve git history so chromatic can compare to branches.
+
+      - name: dump env
+        run: printenv
+
+      - name: check github
+        run: echo ${{github.event.pull_request.draft}}
+
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Chromatic
+        run: yarn chromatic -t f3c5081a0b43
